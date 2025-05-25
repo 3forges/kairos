@@ -12,15 +12,15 @@ Once the deployment of kairos is done, you do not need any connection to the int
 * A React frontend, 
 * A FastAPI REST API
 * A Postgres Database
-* A Whisper AI service
+* A Whisper AI Speech-to-text service
 
-And in the React frontend, you an pres a microphone button, speak, and the private Whisper AI will trasncribe to text what you say.
+And in the React frontend, you an press a microphone button, speak, and the private Whisper AI will trasncribe to text what you say.
 
 It WILL work with only 4 CPU, no GPU, and 10 GB of RAM, but the whisper AI will be slow, very slow.
 
-So for a production deployement, you will need more CPU, and espcially you will need GPUs. See technical details for that.
+So for a production deployment, you will need more CPU, and especially you will need GPUs. We will provide technical details for that, in future releases.
 
-Never the less, the point of this first realease, is to give you a fully private Whisper Service ACTUALLY working, with a decent react frontend.
+Never the less, the point of this first release, is to give you a fully private Whisper Speech-to-text Service ACTUALLY working, with a decent react frontend, and a decent REST API.
 
 Enjoy.
 
