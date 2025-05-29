@@ -42,7 +42,7 @@ Read the [deployment.md](./deployment.md) docs for more details.
 
 ## Special Thanks
 
-This frist release was created starting from the `0.8.0` release of the awesome <https://github.com/fastapi/full-stack-fastapi-template>
+This first release was created starting from the `0.8.0` release of the awesome <https://github.com/fastapi/full-stack-fastapi-template>
 
 <!--
 ## Why Kairos

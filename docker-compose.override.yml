@@ -1,7 +1,7 @@
 services:
 
   # Local services are available on their ports, but also available on:
-  # http://api.localhost.tiangolo.com: backend
+  # http://api.localhost.tiangolo.com: api
   # http://dashboard.localhost.tiangolo.com: frontend
   # etc. To enable it, update .env, set:
   # DOMAIN=localhost.tiangolo.com
@@ -55,12 +55,12 @@ services:
     ports:
       - "8080:8080"
 
-  backend:
+  whisper-api:
     restart: "no"
     ports:
-      - "8000:8000"
+      - "8001:8000"
     build:
-      context: ./backend
+      context: ./whisper-api
     # command: sleep infinity  # Infinite loop to keep container alive doing nothing
     command:
       - fastapi
@@ -69,17 +69,48 @@ services:
       - "app/main.py"
     develop:
       watch:
-        - path: ./backend
+        - path: ./whisper-api
           action: sync
           target: /app
           ignore:
-            - ./backend/.venv
+            - ./whisper-api/.venv
             - .venv
-        - path: ./backend/pyproject.toml
+        - path: ./whisper-api/pyproject.toml
           action: rebuild
     # TODO: remove once coverage is done locally
     volumes:
-      - ./backend/htmlcov:/app/htmlcov
+      - ./whisper-api/htmlcov:/app/htmlcov
+    environment:
+      SMTP_HOST: "mailcatcher"
+      SMTP_PORT: "1025"
+      SMTP_TLS: "false"
+      EMAILS_FROM_EMAIL: "noreply@example.com"
+
+  api:
+    restart: "no"
+    ports:
+      - "8000:8000"
+    build:
+      context: ./api
+    # command: sleep infinity  # Infinite loop to keep container alive doing nothing
+    command:
+      - fastapi
+      - run
+      - --reload
+      - "app/main.py"
+    develop:
+      watch:
+        - path: ./api
+          action: sync
+          target: /app
+          ignore:
+            - ./api/.venv
+            - .venv
+        - path: ./api/pyproject.toml
+          action: rebuild
+    # TODO: remove once coverage is done locally
+    volumes:
+      - ./api/htmlcov:/app/htmlcov
     environment:
       SMTP_HOST: "mailcatcher"
       SMTP_PORT: "1025"
@@ -107,16 +138,16 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.playwright
       args:
-        - VITE_API_URL=http://backend:8000
+        - VITE_API_URL=http://api:8000
         - NODE_ENV=production
     ipc: host
     depends_on:
-      - backend
+      - api
       - mailcatcher
     env_file:
       - .env
     environment:
-      - VITE_API_URL=http://backend:8000
+      - VITE_API_URL=http://api:8000
       - MAILCATCHER_HOST=http://mailcatcher:1080
       # For the reports when run locally
       - PLAYWRIGHT_HTML_HOST=0.0.0.0
