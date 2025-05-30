@@ -100,9 +100,9 @@ const AddContribution = (): React.JSX.Element => {
           const formData = new FormData();
           // formData.append("audio", blob, "myVoiceFile.wav");
           formData.append("file", blob, "myVoiceFile.wav");
-          // formData.append("language", "french");
-          // formData.append("model", "medium");
-          formData.append("model", "small");
+          // formData.append("language", "en");
+          // formData.append("model", "small");
+          formData.append("model", "medium");
           formData.append("language", "fr");
           formData.append("stream", 'true');
           const response = await fetch("http://localhost:8002/v1/audio/transcriptions", {
