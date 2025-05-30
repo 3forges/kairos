@@ -26,9 +26,48 @@ Enjoy.
 
 ## Deploy first
 
-### Configure
 
-You can then update configs in the `.env` files to customize your configurations.
+```bash
+
+export DESIRED_RELEASE='0.0.2'
+export KAIROS_HOME=~/kairos_home
+
+if [ -d ${KAIROS_HOME} ]; then
+ rm -fr ${KAIROS_HOME}
+fi;
+
+mkdir -p ${KAIROS_HOME}
+
+git clone git@github.com:3forges/kairos.git ${KAIROS_HOME}
+
+cd ${KAIROS_HOME}
+
+git checkout ${DESIRED_RELEASE}
+
+
+cd ./speaches/
+chmod +x ./start.sh
+./start.sh
+
+cd ../
+
+# -
+# In the ${KAIROS_HOME}/.env be careful to
+# set the BACKEND_CORS_ORIGINS en var. to
+# which origins you need, at least for 
+# HTTP localhost:
+# -
+# BACKEND_CORS_ORIGINS="http://localhost:5173,http://localhost:8001,http://localhost:8002,http://localhost:8000"
+# -
+# 
+docker-compose up -d
+```
+
+And now on the machine where you deployed, you can use the app at http://localhost:5173/
+
+### Configure more
+
+You can update configs in the `.env` files to customize your configurations.
 
 Before deploying it, make sure you change at least the values for:
 
@@ -42,7 +81,7 @@ Read the [deployment.md](./deployment.md) docs for more details.
 
 ## Special Thanks
 
-This frist release was created starting from the `0.8.0` release of the awesome <https://github.com/fastapi/full-stack-fastapi-template>
+This first release was created starting from the `0.8.0` release of the awesome <https://github.com/fastapi/full-stack-fastapi-template>
 
 <!--
 ## Why Kairos

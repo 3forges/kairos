@@ -2,7 +2,7 @@ import { useState } from "react";
 // import Title from "./Title";
 // import axios from "redaxios";
 import axios from "axios";
-import RecordMessage from "./RecordMessage";
+import RecordMessage from "./RecordMessage"; // frontend\src\components\Speechtotext\RecordMessage.tsx
 // import React from "react";
 import * as React from "react"
 
@@ -73,9 +73,9 @@ const Controller = (): React.JSX.Element => {
         const formData = new FormData();
         formData.append("audio", blob, "myVoiceFile.wav");
         
-        // let response = await fetch( "http://localhost:8000/api/v1/transcribe/", 
+        // let response = await fetch( "http://localhost:8001/api/v1/transcribe/", 
         /*
-        fetch( "http://localhost:8000/api/v1/transcribe/", 
+        fetch( "http://localhost:8001/api/v1/transcribe/", 
           { method: "post", 
             body: formData, 
             // headers : 
@@ -102,8 +102,8 @@ const Controller = (): React.JSX.Element => {
           */
         // send form data to api endpoint
         await axios
-          .post("http://localhost:8000/api/v1/transcribe/", formData, {
-          // .post("http://mongo.pesto.io:8000/api/v1/transcribe/", formData, {
+          .post("http://localhost:8001/api/v1/transcribe/", formData, {
+          // .post("http://mongo.pesto.io:8001/api/v1/transcribe/", formData, {
             headers: {
               // "Content-Type": "audio/mpeg",
               // "Content-Type": "multipart/form-data; boundary=------------------------7e1169bfdffcca45", // Simply don't set the Content-Type header manually and the browser will automatically set "multipart/form-data; boundary=..." value.
