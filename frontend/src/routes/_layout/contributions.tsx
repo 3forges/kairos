@@ -13,7 +13,9 @@ import { z } from "zod"
 
 import { ContributionsService } from "@/client"
 import { ContributionActionsMenu } from "@/components/Common/ContributionActionsMenu"
-import AddContribution from "@/components/Contributions/AddContribution"
+// import AddContribution from "@/components/Contributions/AddContribution"
+// import AddContribution from "@/components/Contributions2/AddContribution"
+import AddContribution from "@/components/Contributions3/AddContribution"
 import PendingContributions from "@/components/Pending/PendingContributions"
 import {
   PaginationItems,

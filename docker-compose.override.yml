@@ -55,36 +55,37 @@ services:
     ports:
       - "8080:8080"
 
-  whisper-api:
-    restart: "no"
-    ports:
-      - "8001:8000"
-    build:
-      context: ./whisper-api
-    # command: sleep infinity  # Infinite loop to keep container alive doing nothing
-    command:
-      - fastapi
-      - run
-      - --reload
-      - "app/main.py"
-    develop:
-      watch:
-        - path: ./whisper-api
-          action: sync
-          target: /app
-          ignore:
-            - ./whisper-api/.venv
-            - .venv
-        - path: ./whisper-api/pyproject.toml
-          action: rebuild
-    # TODO: remove once coverage is done locally
-    volumes:
-      - ./whisper-api/htmlcov:/app/htmlcov
-    environment:
-      SMTP_HOST: "mailcatcher"
-      SMTP_PORT: "1025"
-      SMTP_TLS: "false"
-      EMAILS_FROM_EMAIL: "noreply@example.com"
+  # --- 
+  # whisper-api:
+  #   restart: "no"
+  #   ports:
+  #     - "8001:8000"
+  #   build:
+  #     context: ./whisper-api
+  #   # command: sleep infinity  # Infinite loop to keep container alive doing nothing
+  #   command:
+  #     - fastapi
+  #     - run
+  #     - --reload
+  #     - "app/main.py"
+  #   develop:
+  #     watch:
+  #       - path: ./whisper-api
+  #         action: sync
+  #         target: /app
+  #         ignore:
+  #           - ./whisper-api/.venv
+  #           - .venv
+  #       - path: ./whisper-api/pyproject.toml
+  #         action: rebuild
+  #   # TODO: remove once coverage is done locally
+  #   volumes:
+  #     - ./whisper-api/htmlcov:/app/htmlcov
+  #   environment:
+  #     SMTP_HOST: "mailcatcher"
+  #     SMTP_PORT: "1025"
+  #     SMTP_TLS: "false"
+  #     EMAILS_FROM_EMAIL: "noreply@example.com"
 
   api:
     restart: "no"

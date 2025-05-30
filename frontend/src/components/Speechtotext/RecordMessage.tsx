@@ -25,7 +25,12 @@ const RecordMessage = ({ handleStop }: Props): React.JSX.Element => {
               onMouseDown={startRecording}
               onMouseUp={stopRecording}
             >
-              <Microphone /> {status}
+              {
+                /**
+                 * https://github.com/DeltaCircuit/react-media-recorder?tab=readme-ov-file#status
+                 */
+              }
+              <Microphone color={status==`recording`?`#EF0000`:`current`} /> {status}
             </Button>
           </HStack>
         </div>

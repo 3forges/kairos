@@ -33,7 +33,19 @@ declare module "@tanstack/react-router" {
     router: typeof router
   }
 }
-
+/**
+ * I removed "<StrictMode>" because it causes my event methods to be called twice...
+ */
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  
+    <CustomProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </CustomProvider>
+  ,
+)
+/*
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <CustomProvider>
@@ -43,3 +55,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </CustomProvider>
   </StrictMode>,
 )
+*/
