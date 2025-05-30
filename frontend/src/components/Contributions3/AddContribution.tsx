@@ -75,7 +75,7 @@ const AddContribution = (): React.JSX.Element => {
   /**
    * State of the content of the texte area
    */
-  const [ideaSentences, setIdeaSentences] = useState<string[]>(["Share Your Idea"])
+  const [ideaSentences, setIdeaSentences] = useState<string[]>([])
   /**
    * A spinner icon will show that Whisper AI is working on transcribing the audio
    */

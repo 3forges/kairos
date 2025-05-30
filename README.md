@@ -63,7 +63,7 @@ cd ../
 docker-compose up -d
 ```
 
-And now on the machine where you deployed, you can use the app at http://localhost:5173/
+And now on the machine where you deployed, you can use the app at <http://localhost:5173/>
 
 ### Configure more
 
@@ -78,6 +78,16 @@ Before deploying it, make sure you change at least the values for:
 You can (and should) pass these as environment variables from secrets.
 
 Read the [deployment.md](./deployment.md) docs for more details.
+
+## THe last issue
+
+Like evryone, I experience weird messages added to my transcriptions:
+
+<https://github.com/SYSTRAN/faster-whisper/issues/267>
+
+<https://github.com/openai/whisper/discussions/928>
+
+I need to find out how to get rid of them.
 
 ## Special Thanks
 
