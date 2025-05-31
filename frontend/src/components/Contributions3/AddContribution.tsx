@@ -123,32 +123,16 @@ const AddContribution = (): React.JSX.Element => {
               } else {
                 // Otherwise do something here to process current chunk
                 console.log(`Speaches AI streaming response - This is NOT the last chiunk returned by the streaming response: [${value}]`)
+                console.log(`Speaches AI streaming response - This is the RAW value returned before any decoding or parsing: [${value}]`)
                 // const transcribedMessage = value;
                 // const transcribedMessageDecoded = new TextDecoder().decode(new Uint8Array(value));
                 const decodedValue = new TextDecoder().decode(new Uint8Array(value));
-                const arrayOftranscribedMessageChunks = `${decodedValue}`.split('\n\n').map((item) => {
-                  let toReturn = `{
-                      "data": { "text": "" }
-                    }`
-                  if ( `${item}` == '' ) {
-                    let toReturn = `{
-                      "data": { "text": "" }
-                    }`
-                  } else {
-                    toReturn = `{ ${item} }`
-                  }
-                  return toReturn.replace('data:', '"data":')
-                }).map((item) => {
-                  console.log(`Speaches AI streaming response - BEFORE JSON.PARSE - item is : [${JSON.stringify({item: item}, null, 2)}]`)
-                  return JSON.parse(item)
-                })
-                console.log(`Speaches AI streaming response - arrayOftranscribedMessageChunks is : [${JSON.stringify({arrayOftranscribedMessageChunks: arrayOftranscribedMessageChunks}, null, 2)}]`)
-                let transcribedMessage = ''
-                arrayOftranscribedMessageChunks.forEach((item) => {
-                  if (!transcribedMessage.includes(`Amara.org`)) {
-                    transcribedMessage = `${transcribedMessage} \n ${item.data.text}`
-                  }
-                })
+                console.log(`Speaches AI streaming response - This is the RAW value returned after TextDecoder: [${value}]`)
+                const parsedJSONresponse = JSON.parse(decodedValue)
+                console.log(`Speaches AI streaming response - parsedJSONresponse is : [${JSON.stringify({parsedJSONresponse: parsedJSONresponse}, null, 2)}]`)
+                let transcribedMessage = parsedJSONresponse.map((item) => {
+                  return item.data.text
+                }).join()
                 
                 console.log(`Speaches AI streaming response - Speaches AI returned: [${JSON.stringify({jbl_transcribedMessage: transcribedMessage}, null, 2)}]`)
                 

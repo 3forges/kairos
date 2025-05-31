@@ -12,7 +12,7 @@ import {
   Alert,
   Spinner
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaPlus } from "react-icons/fa"
 
 import { type ContributionCreate, ContributionsService } from "@/client"
@@ -75,7 +75,7 @@ const AddContribution = (): React.JSX.Element => {
   /**
    * State of the content of the texte area
    */
-  const [ideaSentences, setIdeaSentences] = useState<string[]>(["Share Your Idea"])
+  const [ideaSentences, setIdeaSentences] = useState<string[]>([])
   /**
    * A spinner icon will show that Whisper AI is working on transcribing the audio
    */
@@ -94,76 +94,84 @@ const AddContribution = (): React.JSX.Element => {
     fetch(blobUrl)
       .then((res) => res.blob())
       .then(async (blob) => {
-        // Construct audio to send file
-        const formData = new FormData();
-        // formData.append("audio", blob, "myVoiceFile.wav");
-        formData.append("file", blob, "myVoiceFile.wav");
-        // formData.append("language", "french");
-        // formData.append("model", "medium");
-        formData.append("model", "small");
-        formData.append("language", "fr");
-        formData.append("stream", 'true');
-        const response = await fetch("http://localhost:8002/v1/audio/transcriptions", {
-          method: "POST",
-          body: formData,
-        });
-        if (response.body) {
-          const reader = response.body.getReader();
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-              // Do something with last chunk of data then exit reader
-              const lastTranscribedMessage = new TextDecoder().decode(new Uint8Array(value?value:[]));
-              console.log(`This is the last chiunk returned by the streaming response: [${lastTranscribedMessage}]`)
-              console.log(`Speaches AI streaming response ended`)
-              setIsTranscribing(false);
-              return;
-            } else {
-              // Otherwise do something here to process current chunk
-              console.log(`Speaches AI streaming response - This is NOT the last chiunk returned by the streaming response: [${value}]`)
-              // const transcribedMessage = value;
-              // const transcribedMessageDecoded = new TextDecoder().decode(new Uint8Array(value));
-              const decodedValue = new TextDecoder().decode(new Uint8Array(value));
-              const arrayOftranscribedMessageChunks = `${decodedValue}`.split('\n\n').map((item) => {
-                let toReturn = `{
-                    "data": { "text": "" }
-                  }`
-                if ( `${item}` == '' ) {
+        const controller = new AbortController();
+        const run = async (controller:AbortController) => {
+          // Construct audio to send file
+          const formData = new FormData();
+          // formData.append("audio", blob, "myVoiceFile.wav");
+          formData.append("file", blob, "myVoiceFile.wav");
+          // formData.append("language", "en");
+          // formData.append("model", "small");
+          formData.append("model", "medium");
+          formData.append("language", "fr");
+          formData.append("stream", 'true');
+          const response = await fetch("http://localhost:8002/v1/audio/transcriptions", {
+            method: "POST",
+            body: formData,
+          });
+          if (response.body) {
+            const reader = response.body.getReader();
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) {
+                // Do something with last chunk of data then exit reader
+                const lastTranscribedMessage = new TextDecoder().decode(new Uint8Array(value?value:[]));
+                console.log(`This is the last chiunk returned by the streaming response: [${lastTranscribedMessage}]`)
+                console.log(`Speaches AI streaming response ended`)
+                setIsTranscribing(false);
+                return;
+              } else {
+                // Otherwise do something here to process current chunk
+                console.log(`Speaches AI streaming response - This is NOT the last chiunk returned by the streaming response: [${value}]`)
+                // const transcribedMessage = value;
+                // const transcribedMessageDecoded = new TextDecoder().decode(new Uint8Array(value));
+                const decodedValue = new TextDecoder().decode(new Uint8Array(value));
+                const arrayOftranscribedMessageChunks = `${decodedValue}`.split('\n\n').map((item) => {
                   let toReturn = `{
-                    "data": { "text": "" }
-                  }`
-                } else {
-                  toReturn = `{ ${item} }`
-                }
-                return toReturn.replace('data:', '"data":')
-              }).map((item) => {
-                console.log(`Speaches AI streaming response - BEFORE JSON.PARSE - item is : [${JSON.stringify({item: item}, null, 2)}]`)
-                return JSON.parse(item)
-              })
-              console.log(`Speaches AI streaming response - arrayOftranscribedMessageChunks is : [${JSON.stringify({arrayOftranscribedMessageChunks: arrayOftranscribedMessageChunks}, null, 2)}]`)
-              let transcribedMessage = ''
-              arrayOftranscribedMessageChunks.forEach((item) => {
-                transcribedMessage = `${transcribedMessage} \n ${item.data.text}`
-              })
+                      "data": { "text": "" }
+                    }`
+                  if ( `${item}` == '' ) {
+                    let toReturn = `{
+                      "data": { "text": "" }
+                    }`
+                  } else {
+                    toReturn = `{ ${item} }`
+                  }
+                  return toReturn.replace('data:', '"data":')
+                }).map((item) => {
+                  console.log(`Speaches AI streaming response - BEFORE JSON.PARSE - item is : [${JSON.stringify({item: item}, null, 2)}]`)
+                  return JSON.parse(item)
+                })
+                console.log(`Speaches AI streaming response - arrayOftranscribedMessageChunks is : [${JSON.stringify({arrayOftranscribedMessageChunks: arrayOftranscribedMessageChunks}, null, 2)}]`)
+                let transcribedMessage = ''
+                arrayOftranscribedMessageChunks.forEach((item) => {
+                  if (!transcribedMessage.includes(`Amara.org`)) {
+                    transcribedMessage = `${transcribedMessage} \n ${item.data.text}`
+                  }
+                })
+                
+                console.log(`Speaches AI streaming response - Speaches AI returned: [${JSON.stringify({jbl_transcribedMessage: transcribedMessage}, null, 2)}]`)
+                
+                setIdeaSentences((ideaSentences) =>{ return [
+                  ...ideaSentences,
+                  `${transcribedMessage}`
+                ]})
+                
+                // setIdeaSentences([
+                //   ...ideaSentences,
+                //   ,transcribedMessage]);
+              }
+
               
-              console.log(`Speaches AI streaming response - Speaches AI returned: [${JSON.stringify({jbl_transcribedMessage: transcribedMessage}, null, 2)}]`)
-              
-              setIdeaSentences([
-                ...ideaSentences,
-                `${transcribedMessage}`
-              ])
-              
-              // setIdeaSentences([
-              //   ...ideaSentences,
-              //   ,transcribedMessage]);
             }
 
-            
+          } else {
+            throw new Error(`response.body is undefined !`)
           }
-
-        } else {
-          throw new Error(`response.body is undefined !`)
         }
+        run(controller)
+
+        return () => controller.abort();
         
         })
         .catch((err: any) => {
@@ -171,7 +179,6 @@ const AddContribution = (): React.JSX.Element => {
             setIsTranscribing(false);
         });
   };
-
   return (
     <DialogRoot
       size={{ base: "xs", md: "md" }}

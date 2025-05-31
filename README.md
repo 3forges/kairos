@@ -65,6 +65,17 @@ docker-compose up -d
 
 And now on the machine where you deployed, you can use the app at <http://localhost:5173/>
 
+Some handies for dev mode:
+
+```bash
+# --- At root dir of repo:
+# docker-compose up -d --force-recreate
+# docker-compose up -d frontend --build
+# --- In the 'speaches/' dir:
+# docker-compose -f ./compose.cpu.yaml logs -f
+
+```
+
 ### Configure more
 
 You can update configs in the `.env` files to customize your configurations.
