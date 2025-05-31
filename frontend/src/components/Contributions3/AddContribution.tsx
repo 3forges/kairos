@@ -127,7 +127,7 @@ const AddContribution = (): React.JSX.Element => {
                 // const transcribedMessage = value;
                 // const transcribedMessageDecoded = new TextDecoder().decode(new Uint8Array(value));
                 const decodedValue = new TextDecoder().decode(new Uint8Array(value));
-                console.log(`Speaches AI streaming response - This is the RAW value returned after TextDecoder: [${decodedValue}]`)
+                console.log(`Speaches AI streaming response - This is the RAW value returned after TextDecoder: [${JSON.stringify({decodedValue: decodedValue}, null, 2)}]`)
                 const parsedJSONresponse = JSON.parse(decodedValue)
                 console.log(`Speaches AI streaming response - parsedJSONresponse is : [${JSON.stringify({parsedJSONresponse: parsedJSONresponse}, null, 2)}]`)
                 let transcribedMessage = parsedJSONresponse.map((item) => {
