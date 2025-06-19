@@ -16,10 +16,12 @@ import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as RecoverPasswordImport } from './routes/recover-password'
 import { Route as LoginImport } from './routes/login'
 import { Route as LayoutImport } from './routes/_layout'
-import { Route as LayoutSpeakoutImport } from './routes/_layout/speakout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
+import { Route as LoginOriginalImport } from './routes/login.original'
+import { Route as LayoutSpeakoutImport } from './routes/_layout/speakout'
 import { Route as LayoutSettingsImport } from './routes/_layout/settings'
 import { Route as LayoutItemsImport } from './routes/_layout/items'
+import { Route as LayoutContributionsImport } from './routes/_layout/contributions'
 import { Route as LayoutAdminImport } from './routes/_layout/admin'
 
 // Create/Update Routes
@@ -49,13 +51,18 @@ const LayoutRoute = LayoutImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LayoutSpeakoutRoute = LayoutSpeakoutImport.update({
-  path: '/speakout',
+const LayoutIndexRoute = LayoutIndexImport.update({
+  path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutIndexRoute = LayoutIndexImport.update({
-  path: '/',
+const LoginOriginalRoute = LoginOriginalImport.update({
+  path: '/original',
+  getParentRoute: () => LoginRoute,
+} as any)
+
+const LayoutSpeakoutRoute = LayoutSpeakoutImport.update({
+  path: '/speakout',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -66,6 +73,11 @@ const LayoutSettingsRoute = LayoutSettingsImport.update({
 
 const LayoutItemsRoute = LayoutItemsImport.update({
   path: '/items',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutContributionsRoute = LayoutContributionsImport.update({
+  path: '/contributions',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -102,6 +114,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAdminImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/contributions': {
+      preLoaderRoute: typeof LayoutContributionsImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/items': {
       preLoaderRoute: typeof LayoutItemsImport
       parentRoute: typeof LayoutImport
@@ -110,12 +126,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/': {
-      preLoaderRoute: typeof LayoutIndexImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/speakout': {
       preLoaderRoute: typeof LayoutSpeakoutImport
+      parentRoute: typeof LayoutImport
+    }
+    '/login/original': {
+      preLoaderRoute: typeof LoginOriginalImport
+      parentRoute: typeof LoginImport
+    }
+    '/_layout/': {
+      preLoaderRoute: typeof LayoutIndexImport
       parentRoute: typeof LayoutImport
     }
   }
@@ -126,12 +146,13 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   LayoutRoute.addChildren([
     LayoutAdminRoute,
+    LayoutContributionsRoute,
     LayoutItemsRoute,
     LayoutSettingsRoute,
-    LayoutIndexRoute,
     LayoutSpeakoutRoute,
+    LayoutIndexRoute,
   ]),
-  LoginRoute,
+  LoginRoute.addChildren([LoginOriginalRoute]),
   RecoverPasswordRoute,
   ResetPasswordRoute,
   SignupRoute,

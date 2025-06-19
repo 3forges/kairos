@@ -16,10 +16,7 @@ import useAuth, { isLoggedIn } from "@/hooks/useAuth"
 import Logo from "/assets/images/fastapi-logo.svg"
 import { emailPattern, passwordRules } from "../utils"
 
-import { QRCodeScanner } from "@/components/Common/QRCodeScanner"
-// import src\components\Common\QRCodeScanner.tsx
-
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/login/original")({
   component: Login,
   beforeLoad: async () => {
     if (isLoggedIn()) {
@@ -59,7 +56,6 @@ function Login() {
 
   return (
     <>
-      <QRCodeScanner />
       <Container
         as="form"
         onSubmit={handleSubmit(onSubmit)}

@@ -145,7 +145,7 @@ const AddContribution = (): React.JSX.Element => {
                 console.log(`Speaches AI streaming response - arrayOftranscribedMessageChunks is : [${JSON.stringify({arrayOftranscribedMessageChunks: arrayOftranscribedMessageChunks}, null, 2)}]`)
                 let transcribedMessage = ''
                 arrayOftranscribedMessageChunks.forEach((item) => {
-                  if (!transcribedMessage.includes(`Amara.org`)) {
+                  if (!item.data.text.includes(`Amara.org`)) {
                     transcribedMessage = `${transcribedMessage} \n ${item.data.text}`
                   }
                 })
