@@ -1,5 +1,5 @@
 import { Button, Text, IconButton } from "@chakra-ui/react"
-import { BsQrCodeScan } from "react-icons/bs"
+import { BsQrCodeScan, BsLockFill } from "react-icons/bs"
 import { Container } from "@chakra-ui/react"
 
 /**
@@ -9,7 +9,8 @@ import { Container } from "@chakra-ui/react"
 import { IDetectedBarcode, Scanner as QRcodeScanner } from '@yudiel/react-qr-scanner';
 import { useState } from "react";
 import React from "react";
-
+import { VaultStatusHoverCard } from "@/components/common/vault/VaultStatusHoverCard"
+// src\components\Common\vault\VaultStatusHoverCard.tsx
 /*
 interface QRCodeScannerProps {
   something: any
@@ -89,6 +90,17 @@ export const QRCodeScanner = (/*{ something }: QRCodeScannerProps*/) => {
   return (
     <Container>
 
+      {
+        // ---------------------------
+        // VAULT STATUS
+        // ---------------------------
+      }
+      <VaultStatusHoverCard />
+      {
+        // ---------------------------
+        // VAULT UNSEAL
+        // ---------------------------
+      }
       {showScanner ? <QRcodeScanner scanDelay={2} onError={onScanErrorHandler} onScan={onScanHandler} /> :
         <Text>
           Click on Button to Scan your Unseal Key
@@ -100,6 +112,14 @@ export const QRCodeScanner = (/*{ something }: QRCodeScannerProps*/) => {
       }}>
         <BsQrCodeScan /> Scan QR code
       </Button>
+
+      {
+        // ---------------------------
+        // VAULT INIT
+        // ---------------------------
+        // Oh and btw... : https://chakra-ui.com/docs/components/qr-code
+        // --- 
+      }
       <Button title="test UNSEAL" variant="solid" type="button" size="md" onClick={() => {
         console.log(`Onclick jbl TEST UNSEAL`)
         // setShowScanner(true)
@@ -107,7 +127,18 @@ export const QRCodeScanner = (/*{ something }: QRCodeScannerProps*/) => {
       }}>
         <BsQrCodeScan /> TEST UNSEAL
       </Button>
-
+      {
+        // ---------------------------
+        // VAULT SEAL
+        // ---------------------------
+      }
+      <Button title="SEAL YOUR VAULT" variant="solid" type="button" size="md" onClick={() => {
+        console.log(`Onclick jbl TEST UNSEAL`)
+        // setShowScanner(true)
+        testSendingPOST()
+      }}>
+        <BsLockFill /> SEAL YOUR VAULT
+      </Button>
     </Container>
   )
 }

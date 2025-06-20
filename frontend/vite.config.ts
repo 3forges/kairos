@@ -15,7 +15,26 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/vault-unseal': {
-        target: 'https://192.168.1.12:8751',
+        // target: 'https://192.168.1.12:8751',
+        target: 'https://navyseals.pesto.io:8751',
+        changeOrigin: true, // Optional: Change origin header to match frontend
+        secure: false, // Optional: Disable checks for https on target
+      },
+      '/vault-status': {
+        // target: 'https://192.168.1.12:8751',
+        target: 'https://navyseals.pesto.io:8751',
+        changeOrigin: true, // Optional: Change origin header to match frontend
+        secure: false, // Optional: Disable checks for https on target
+      },
+      '/vault-init': {
+        // target: 'https://192.168.1.12:8751',
+        target: 'https://navyseals.pesto.io:8751',
+        changeOrigin: true, // Optional: Change origin header to match frontend
+        secure: false, // Optional: Disable checks for https on target
+      },
+      '/vault-seal': {
+        // target: 'https://192.168.1.12:8751',
+        target: 'https://navyseals.pesto.io:8751',
         changeOrigin: true, // Optional: Change origin header to match frontend
         secure: false, // Optional: Disable checks for https on target
       },
