@@ -8,7 +8,18 @@ import mkcert from "vite-plugin-mkcert" // awesome guys // https://stackoverflow
 export default defineConfig({
   server: {
     // host: '0.0.0.0'
-    host: '192.168.1.12'
+    host: '192.168.1.12',
+    cors: {
+      origin: "*"
+    },
+    allowedHosts: true,
+    proxy: {
+      '/vault-unseal': {
+        target: 'https://192.168.1.12:8751',
+        changeOrigin: true, // Optional: Change origin header to match frontend
+        secure: false, // Optional: Disable checks for https on target
+      },
+    },
   },
   resolve: {
     alias: {
