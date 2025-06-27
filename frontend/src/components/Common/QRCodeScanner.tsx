@@ -7,9 +7,13 @@ import { Container } from "@chakra-ui/react"
  * 
  */
 import { IDetectedBarcode, Scanner as QRcodeScanner } from '@yudiel/react-qr-scanner';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import React from "react";
 import { VaultStatusHoverCard } from "@/components/common/vault/VaultStatusHoverCard"
+import { VaultUnsealStatusCard } from "@/components/common/vault/VaultUnsealStatusCard"
+import { VaultStatusCard } from "@/components/common/vault/VaultStatusCard"
+import { VaultContext } from "@/components/common/vault/VaultContext";
+
 // src\components\Common\vault\VaultStatusHoverCard.tsx
 /*
 interface QRCodeScannerProps {
@@ -18,6 +22,7 @@ interface QRCodeScannerProps {
 */
 
 export const QRCodeScanner = (/*{ something }: QRCodeScannerProps*/) => {
+  const vaultContext = useContext(VaultContext);
   const [showScanner, setShowScanner] = useState(false)
   /**
  * (detectedCodes: IDetectedBarcode[]) => void
@@ -83,6 +88,18 @@ export const QRCodeScanner = (/*{ something }: QRCodeScannerProps*/) => {
     alert(` Here is the scanned code: [${detectedCodes[0].rawValue}] // and unsealVaultResponse = [${JSON.stringify({ unsealVaultResponse: unsealVaultResponse }, null, 2)}] `);
     alert(` Here is the Unseal VAult Response: [${JSON.stringify({unsealVaultResponse: unsealVaultResponse}, null, 2)}]`);
     console.log(` Here is the Unseal VAult Response: [${JSON.stringify({unsealVaultResponse: unsealVaultResponse}, null, 2)}]`);
+    vaultContext.setVaultSealStatus({
+      cluster_id: unsealVaultResponse.cluster_id,
+      cluster_name: unsealVaultResponse.cluster_name,
+      initialized: unsealVaultResponse.initialized,
+      nonce: unsealVaultResponse.nonce,
+      progress: unsealVaultResponse.progress,
+      sealed: unsealVaultResponse.sealed,
+      storage_type: unsealVaultResponse.storage_type,
+      type: unsealVaultResponse.type,
+      version: unsealVaultResponse.version,
+      warnings: unsealVaultResponse.warnings,
+    })
   }
   const onScanErrorHandler = async (error: unknown) => {
     console.log(` An error occured while trying to scna the QR code, the error is: [${JSON.stringify({ error: error }, null, 2)}]`)
@@ -96,11 +113,13 @@ export const QRCodeScanner = (/*{ something }: QRCodeScannerProps*/) => {
         // ---------------------------
       }
       <VaultStatusHoverCard />
+      <VaultStatusCard />
       {
         // ---------------------------
         // VAULT UNSEAL
         // ---------------------------
       }
+      <VaultUnsealStatusCard />
       {showScanner ? <QRcodeScanner scanDelay={2} onError={onScanErrorHandler} onScan={onScanHandler} /> :
         <Text>
           Click on Button to Scan your Unseal Key

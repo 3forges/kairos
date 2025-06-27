@@ -19,6 +19,8 @@ import { emailPattern, passwordRules } from "../utils"
 import { QRCodeScanner } from "@/components/Common/QRCodeScanner"
 // import src\components\Common\QRCodeScanner.tsx
 
+import { VaultContextProvider } from "@/components/Common/vault/VaultContext"
+
 export const Route = createFileRoute("/login")({
   component: Login,
   beforeLoad: async () => {
@@ -59,6 +61,7 @@ function Login() {
 
   return (
     <>
+    <VaultContextProvider  >
       <QRCodeScanner />
       <Container
         as="form"
@@ -114,6 +117,8 @@ function Login() {
           </RouterLink>
         </Text>
       </Container>
+      
+      </VaultContextProvider>
     </>
   )
 }
